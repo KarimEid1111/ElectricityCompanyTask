@@ -1,0 +1,47 @@
+﻿@model System.Collections.Generic.List<WebPortal.Models.CuttingDownIgnoredViewModel>
+
+
+<div class="container mt-5">
+    <h2>Ignored Outages</h2>
+
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Actions</th>
+            <th>Incident ID</th>
+            <th>Actual Create Date</th>
+            <th>Sync Create Date</th>
+            <th>Cable Name</th>
+            <th>Cabin Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var outage in Model)
+            {
+                <tr>
+                    <td>
+                        <!-- Delete Button -->
+                        <form asp-action="Delete" asp-controller="IgnoredOutages" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@outage.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                    </td>
+                    <td>@outage.CuttingDownIncidentId</td>
+                    <td>@outage.ActualCreateDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@outage.SynchCreateDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@outage.CableName</td>
+                    <td>@outage.CabinName</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center">No Ignored Outages Found</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

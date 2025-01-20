@@ -1,0 +1,18 @@
+﻿@model WebPortal.Models.SearchPageViewModel
+@{
+    ViewData["Title"] = "Cutting Down Search";
+}
+
+
+<div class="container mt-5">
+    <h2>Advanced Search</h2>
+
+    <!-- Search Form Partial -->
+    @await Html.PartialAsync("_SearchFilters", Model.Filters)
+
+    <!-- Results Table Container -->
+    <div id="results-container" class="mt-5">
+        @await Html.PartialAsync("_SearchResultsTable", Model.Items)
+    </div>
+</div>
+

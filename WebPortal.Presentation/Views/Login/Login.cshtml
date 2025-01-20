@@ -1,0 +1,28 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Reference your layout file
+}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow" style="width: 350px;">
+        <div class="text-center mb-4">
+            <h2>Cutting Portal</h2>
+        </div>
+        <form asp-controller="Login" asp-action="Login" method="post">
+            <div class="form-group mb-3">
+                <label for="Username">Username</label>
+                <input type="text" class="form-control" id="Username" name="Username" placeholder="Enter your username" required />
+            </div>
+            <div class="form-group mb-3">
+                <label for="Password">Password</label>
+                <input type="password" class="form-control" id="Password" name="Password" placeholder="Enter your password" required />
+            </div>
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="RememberMe" name="RememberMe" />
+                <label class="form-check-label" for="RememberMe">Remember Me</label>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </form>
+    </div>
+</div>
