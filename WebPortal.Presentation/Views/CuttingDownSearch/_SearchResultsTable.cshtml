@@ -1,74 +1,75 @@
 ﻿@model IEnumerable<WebPortal.Models.CuttingDownResultViewModel>
 
-<h3>Search Results</h3>
+<h3 class="table-title">Search Results</h3>
 @if (Model != null && Model.Any())
 {
     <!-- Close All Form -->
-    <form asp-action="CloseAllCases" asp-controller="CuttingDownSearch" method="post">
+    <form asp-action="CloseAllCases" asp-controller="CuttingDownSearch" method="post" class="mb-3 text-end">
         @foreach (var row in Model)
         {
             <input type="hidden" name="ids" value="@row.CuttingDownKey" />
         }
-        <button type="submit" class="btn btn-danger mb-3">Close All</button>
+        <button type="submit" class="btn btn-danger btn-sm">Close All</button>
     </form>
 
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>Actions</th>
-            <th>Cutting_Down_Key</th>
-            <th>Cutting_Down_Incident_ID</th>
-            <th>Channel_Key</th>
-            <th>Cutting_Down_Problem_Type_Key</th>
-            <th>ActualCreateDate</th>
-            <th>SynchCreateDate</th>
-            <th>SynchUpdateDate</th>
-            <th>ActualEndDate</th>
-            <th>IsPlanned</th>
-            <th>IsGlobal</th>
-            <th>PlannedStartDTS</th>
-            <th>PlannedEndDTS</th>
-            <th>IsActive</th>
-            <th>CreateSystemUserID</th>
-            <th>UpdateSystemUserID</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var row in Model)
-        {
+    <div class="table-responsive">
+        <table class="table table-hover custom-table">
+            <thead class="table-light">
             <tr>
-                <td>
-
-                    @if (row.IsActive == true && row.ActualEndDate == null)
-                    {
-                        <!-- Close Form -->
-                        <form asp-action="CloseCase" asp-controller="CuttingDownSearch" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="@row.CuttingDownKey" />
-                            <button type="submit" class="btn btn-danger">Close</button>
-                        </form>
-                    }
-                </td>
-                <td>@row.CuttingDownKey</td>
-                <td>@row.CuttingDownIncidentId</td>
-                <td>@row.ChannelKey</td>
-                <td>@row.CuttingDownProblemTypeKey</td>
-                <td>@row.ActualCreateDate?.ToString("yyyy-MM-dd")</td>
-                <td>@row.SynchCreateDate?.ToString("yyyy-MM-dd")</td>
-                <td>@row.SynchUpdateDate?.ToString("yyyy-MM-dd")</td>
-                <td>@row.ActualEndDate?.ToString("yyyy-MM-dd")</td>
-                <td>@row.IsPlanned</td>
-                <td>@row.IsGlobal</td>
-                <td>@row.PlannedStartDts?.ToString("yyyy-MM-dd")</td>
-                <td>@row.PlannedEndDts?.ToString("yyyy-MM-dd")</td>
-                <td>@row.IsActive</td>
-                <td>@row.CreateSystemUserId</td>
-                <td>@row.UpdateSystemUserId</td>
+                <th>Actions</th>
+                <th>Key</th>
+                <th>Incident ID</th>
+                <th>Channel</th>
+                <th>Problem Type</th>
+                <th>Created</th>
+                <th>Synch Created</th>
+                <th>Synch Updated</th>
+                <th>End Date</th>
+                <th>Planned</th>
+                <th>Global</th>
+                <th>Planned Start</th>
+                <th>Planned End</th>
+                <th>Active</th>
+                <th>Created By</th>
+                <th>Updated By</th>
             </tr>
-        }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            @foreach (var row in Model)
+            {
+                <tr>
+                    <td>
+                        @if (row.IsActive == true && row.ActualEndDate == null)
+                        {
+                            <!-- Close Form -->
+                            <form asp-action="CloseCase" asp-controller="CuttingDownSearch" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@row.CuttingDownKey" />
+                                <button type="submit" class="btn btn-danger btn-sm">Close</button>
+                            </form>
+                        }
+                    </td>
+                    <td>@row.CuttingDownKey</td>
+                    <td>@row.CuttingDownIncidentId</td>
+                    <td>@row.ChannelKey</td>
+                    <td>@row.CuttingDownProblemTypeKey</td>
+                    <td>@row.ActualCreateDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@row.SynchCreateDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@row.SynchUpdateDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@row.ActualEndDate?.ToString("yyyy-MM-dd")</td>
+                    <td>@row.IsPlanned</td>
+                    <td>@row.IsGlobal</td>
+                    <td>@row.PlannedStartDts?.ToString("yyyy-MM-dd")</td>
+                    <td>@row.PlannedEndDts?.ToString("yyyy-MM-dd")</td>
+                    <td>@row.IsActive</td>
+                    <td>@row.CreateSystemUserId</td>
+                    <td>@row.UpdateSystemUserId</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 }
 else
 {
-    <p>No results found.</p>
+    <p class="text-muted">No results found.</p>
 }

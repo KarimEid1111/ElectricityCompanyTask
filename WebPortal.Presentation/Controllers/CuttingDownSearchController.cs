@@ -19,6 +19,8 @@ namespace WebPortal.Controllers
         [HttpGet]
         public async Task<IActionResult> Search()
         {
+            ViewData["ShowCuttingPortalNav"] = true;
+            ViewData["ActivePage"] = "Search";
             var model = new SearchFiltersViewModel
             {
                 Sources = (await unitOfWork.ChannelRepository.GetAllAsync())
@@ -70,6 +72,8 @@ namespace WebPortal.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(SearchFiltersViewModel filters)
         {
+            ViewData["ShowCuttingPortalNav"] = true;
+            ViewData["ActivePage"] = "Search";
             if (!ModelState.IsValid)
             {
                 // Repopulate dropdowns if the request is invalid

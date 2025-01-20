@@ -1,10 +1,8 @@
-﻿@model WebPortal.Models.SearchFiltersViewModel
-
-<form asp-action="Search" method="post" asp-controller="CuttingDownSearch">
-    <div class="row">
+﻿<form asp-action="Search" method="post" asp-controller="CuttingDownSearch" class="custom-search-form">
+    <div class="row custom-form-group">
         <div class="col-md-6">
-            <label for="SourceOfCuttingDown">Source of Cutting Down</label>
-            <select id="SourceOfCuttingDown" name="SourceOfCuttingDown" class="form-control">
+            <label for="SourceOfCuttingDown" class="form-label">Source of Cutting Down</label>
+            <select id="SourceOfCuttingDown" name="SourceOfCuttingDown" class="form-select">
                 <option value="">Please Select</option>
                 @foreach (var source in Model?.Sources ?? Enumerable.Empty<SelectListItem>())
                 {
@@ -13,8 +11,8 @@
             </select>
         </div>
         <div class="col-md-6">
-            <label for="ProblemTypeKey">Problem Type</label>
-            <select id="ProblemTypeKey" name="ProblemTypeKey" class="form-control">
+            <label for="ProblemTypeKey" class="form-label">Problem Type</label>
+            <select id="ProblemTypeKey" name="ProblemTypeKey" class="form-select">
                 <option value="">Please Select</option>
                 @foreach (var problemType in Model?.ProblemTypes ?? Enumerable.Empty<SelectListItem>())
                 {
@@ -24,18 +22,18 @@
         </div>
     </div>
 
-    <div class="row mt-3">
+    <div class="row custom-form-group mt-3">
         <div class="col-md-6">
-            <label for="IsClosed">Status</label>
-            <select id="IsClosed" name="IsClosed" class="form-control">
+            <label for="IsClosed" class="form-label">Status</label>
+            <select id="IsClosed" name="IsClosed" class="form-select">
                 <option value="">Please Select</option>
                 <option value="true">Closed</option>
                 <option value="false">Open</option>
             </select>
         </div>
         <div class="col-md-6">
-            <label for="SearchCriteria">Search Criteria</label>
-            <select id="SearchCriteria" name="SearchCriteria" class="form-control">
+            <label for="SearchCriteria" class="form-label">Search Criteria</label>
+            <select id="SearchCriteria" name="SearchCriteria" class="form-select">
                 <option value="">Please Select</option>
                 @foreach (var criteria in Model?.SearchCriteriaList ?? Enumerable.Empty<SelectListItem>())
                 {
@@ -45,16 +43,16 @@
         </div>
     </div>
 
-    <div class="row mt-3">
+    <div class="row custom-form-group mt-3">
         <div class="col-md-12">
-            <label for="SearchValue">Search Value</label>
+            <label for="SearchValue" class="form-label">Search Value</label>
             <input type="text" id="SearchValue" name="SearchValue" class="form-control" placeholder="Enter search value" />
         </div>
     </div>
 
-    <div class="row mt-3">
+    <div class="row mt-4">
         <div class="col-md-12 text-center">
-            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="submit" class="btn btn-primary btn-lg">Search</button>
         </div>
     </div>
 </form>

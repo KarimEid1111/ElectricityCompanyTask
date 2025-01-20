@@ -18,6 +18,8 @@ public class AddOutageController : Controller
     [HttpGet]
     public async Task<IActionResult> AddOutage()
     {
+        ViewData["ShowCuttingPortalNav"] = true;
+        ViewData["ActivePage"] = "AddOutage";
         // Fetch dropdown data using Unit of Work repositories
         var problemTypes = await _unitOfWork.FtaProblemTypeRepository.GetAllAsync();
         var networkHierarchies = await _unitOfWork.NetworkElementHierarchyRepository.GetAllAsync();

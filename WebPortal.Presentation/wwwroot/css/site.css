@@ -26,3 +26,191 @@ body {
   margin-bottom: 60px;
   background-color: #fff;
 }
+
+.cutting-portal-nav {
+  background-color: #e9e9ff; /* Light purple background */
+  border-radius: 8px; /* Rounded corners */
+  padding: 10px 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.cutting-portal-nav .nav-link {
+  color: #5a5a9e; /* Muted purple for text */
+  font-weight: bold;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 10px 15px;
+  transition: all 0.3s ease-in-out; /* Smooth hover effect */
+}
+
+.cutting-portal-nav .nav-link:hover {
+  color: #fff; /* White text on hover */
+  background-color: #7a7ac8; /* Darker purple on hover */
+  border-color: #7a7ac8;
+}
+
+.cutting-portal-nav .nav-link.active {
+  color: #fff;
+  background-color: #5c5cc8; /* Highlighted purple for active tab */
+  border-color: #5c5cc8;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for active tab */
+}
+
+.cutting-portal-nav .nav-link i {
+  margin-right: 5px; /* Space between icon and text */
+  font-size: 1.2rem; /* Slightly larger icons */
+}
+
+/* Container Styles */
+.custom-search-form {
+  background-color: #f9f9f9; /* Light background for the form */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 10px; /* Rounded corners */
+  padding: 20px; /* Add padding inside the form */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Form Group Spacing */
+.custom-form-group {
+  margin-bottom: 15px; /* Spacing between rows */
+}
+
+/* Label Styles */
+.form-label {
+  font-weight: 600; /* Bold labels */
+  color: #5a5a5a; /* Neutral text color */
+  margin-bottom: 5px; /* Space between label and input */
+}
+
+/* Select Input Styles */
+.form-select {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Light border */
+  box-shadow: none; /* No shadow */
+  transition: border-color 0.2s ease-in-out; /* Smooth focus effect */
+}
+
+/* Select Input Focus Styles */
+.form-select:focus {
+  border-color: #5c5cc8; /* Highlighted purple on focus */
+  box-shadow: 0 0 5px rgba(92, 92, 200, 0.4); /* Soft focus shadow */
+}
+
+/* Input Text Field Styles */
+.form-control {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc; /* Light border */
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Input Focus Styles */
+.form-control:focus {
+  border-color: #5c5cc8; /* Highlighted purple */
+  box-shadow: 0 0 5px rgba(92, 92, 200, 0.4); /* Soft focus shadow */
+}
+
+/* Button Styles */
+.btn-primary {
+  background-color: #5c5cc8; /* Primary purple */
+  border-color: #5c5cc8;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+  background-color: #7a7ac8; /* Lighter purple on hover */
+  border-color: #7a7ac8;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .custom-form-group {
+    margin-bottom: 20px; /* Increase spacing for smaller screens */
+  }
+  .form-label {
+    font-size: 0.9rem; /* Slightly smaller labels on smaller screens */
+  }
+}
+
+/* Table Title */
+.table-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #5c5cc8; /* Purple theme color */
+}
+
+/* Table Styling */
+.custom-table {
+  border: 1px solid #ddd; /* Light border around the table */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Clip any overflow */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  background-color: #ffffff; /* White background */
+}
+
+/* Table Header */
+.custom-table thead {
+  background-color: #f1f1f9; /* Light purple background for header */
+  color: #5c5cc8; /* Purple text for header */
+  font-weight: bold;
+}
+
+/* Table Rows */
+.custom-table tbody tr {
+  transition: background-color 0.2s ease-in-out; /* Smooth hover effect */
+}
+
+.custom-table tbody tr:hover {
+  background-color: #f9f9ff; /* Light purple on hover */
+}
+
+/* Table Cells */
+.custom-table td, .custom-table th {
+  padding: 10px 15px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #ddd; /* Light row separator */
+}
+
+/* Actions Column */
+.custom-table td:first-child {
+  text-align: left; /* Align buttons to the left */
+}
+
+/* Buttons */
+.btn-danger {
+  background-color: #c44569; /* Custom red color */
+  border-color: #c44569;
+  font-size: 0.85rem; /* Slightly smaller button */
+  padding: 5px 10px;
+}
+
+.btn-danger:hover {
+  background-color: #e74c3c; /* Brighter red on hover */
+  border-color: #e74c3c;
+}
+
+/* Responsive Design */
+.table-responsive {
+  overflow-x: auto; /* Enable horizontal scrolling on smaller screens */
+}
+
+@media (max-width: 768px) {
+  .table-title {
+    font-size: 1.2rem; /* Smaller title for mobile */
+  }
+
+  .custom-table td, .custom-table th {
+    font-size: 0.8rem; /* Smaller text for mobile */
+    padding: 8px 10px;
+  }
+}

@@ -13,6 +13,8 @@ public class IgnoredOutagesController(IUnitOfWork unitOfWork) : Controller
     [HttpGet]
     public async Task<IActionResult> IgnoredOutages()
     {
+        ViewData["ShowCuttingPortalNav"] = true;
+        ViewData["ActivePage"] = "IgnoredOutages";
         // Fetch data using Unit of Work and map to the CuttingDownIgnoredViewModel
         var ignoredOutages = (await unitOfWork.CuttingDownIgnoredRepository.GetAllAsync())
             .Select(outage => new CuttingDownIgnoredViewModel
