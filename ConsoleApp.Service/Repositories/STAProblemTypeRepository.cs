@@ -5,7 +5,7 @@ using ConsoleApp.Service.Common;
 
 namespace ConsoleApp.Service.Repositories;
 
-public class StationRepository(MyDbContext context) : GenericRepository<Station>(context), IStationRepository
+public class STAProblemTypeRepository(MyDbContext context) : GenericRepository<STAProblemType>(context), ISTAProblemTypeRepository
 {
     
 }

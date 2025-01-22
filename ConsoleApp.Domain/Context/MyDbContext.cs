@@ -38,7 +38,7 @@ public partial class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     public virtual DbSet<Flat> Flats { get; set; }
 
-    public virtual DbSet<Governrate> Governrates { get; set; }
+    public virtual DbSet<Governorate> Governorates { get; set; }
 
     public virtual DbSet<NetworkElement> NetworkElements { get; set; }
 
@@ -46,15 +46,15 @@ public partial class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     public virtual DbSet<NetworkElementType> NetworkElementTypes { get; set; }
 
-    public virtual DbSet<FtaProblemType> ProblemTypes { get; set; }
+    public virtual DbSet<FTAProblemType> ProblemTypes { get; set; }
 
-    public virtual DbSet<StaProblemType> ProblemTypes1 { get; set; }
+    public virtual DbSet<STAProblemType> ProblemTypes1 { get; set; }
 
     public virtual DbSet<Sector> Sectors { get; set; }
 
     public virtual DbSet<Station> Stations { get; set; }
 
-    public virtual DbSet<Subscribtion> Subscribtions { get; set; }
+    public virtual DbSet<Subscription> Subscriptions { get; set; }
 
     public virtual DbSet<Tower> Towers { get; set; }
 
@@ -63,511 +63,465 @@ public partial class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
     public virtual DbSet<Zone> Zones { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-FC654RV\\KARIM;Database=Electricity Company Task;Integrated Security=True;encrypt=false;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=.;Database=Electricity Company Task;Integrated Security=True;encrypt=false;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Block>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Block__3214EC27B831AB71");
+            entity.HasKey(e => e.BlockKey).HasName("PK__Block__DF1963F11B56E877");
 
-            entity.ToTable("Block", "sta");
+            entity.ToTable("Block", "STA");
 
-            entity.HasIndex(e => e.CableId, "IX_Cable_ID");
+            entity.HasIndex(e => e.CableKey, "idx_Block_CableKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CableId).HasColumnName("Cable_ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.BlockKey).HasColumnName("Block_Key");
+            entity.Property(e => e.BlockName)
+                .HasMaxLength(100)
+                .HasColumnName("Block_Name");
+            entity.Property(e => e.CableKey).HasColumnName("Cable_Key");
 
-            entity.HasOne(d => d.Cable).WithMany(p => p.Blocks)
-                .HasForeignKey(d => d.CableId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.CableKeyNavigation).WithMany(p => p.Blocks)
+                .HasForeignKey(d => d.CableKey)
                 .HasConstraintName("FK_Block_Cable");
         });
 
         modelBuilder.Entity<Building>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Building__3214EC27CBE7E718");
+            entity.HasKey(e => e.BuildingKey).HasName("PK__Building__03305901CB205A00");
 
-            entity.ToTable("Building", "sta");
+            entity.ToTable("Building", "STA");
 
-            entity.HasIndex(e => e.BlockId, "IX_Block_ID");
+            entity.HasIndex(e => e.BlockKey, "idx_Building_BlockKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.BlockId).HasColumnName("Block_ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.BuildingKey).HasColumnName("Building_Key");
+            entity.Property(e => e.BlockKey).HasColumnName("Block_Key");
+            entity.Property(e => e.BuildingName)
+                .HasMaxLength(100)
+                .HasColumnName("Building_Name");
 
-            entity.HasOne(d => d.Block).WithMany(p => p.Buildings)
-                .HasForeignKey(d => d.BlockId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.BlockKeyNavigation).WithMany(p => p.Buildings)
+                .HasForeignKey(d => d.BlockKey)
                 .HasConstraintName("FK_Building_Block");
         });
 
         modelBuilder.Entity<Cabin>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cabin__3214EC2717FE7759");
+            entity.HasKey(e => e.CabinKey).HasName("PK__Cabin__341FCAA062FC1C85");
 
-            entity.ToTable("Cabin", "sta");
+            entity.ToTable("Cabin", "STA");
 
-            entity.HasIndex(e => e.TowerId, "IX_Tower_ID");
+            entity.HasIndex(e => e.TowerKey, "idx_Cabin_TowerKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.TowerId).HasColumnName("Tower_ID");
+            entity.Property(e => e.CabinKey).HasColumnName("Cabin_Key");
+            entity.Property(e => e.CabinName)
+                .HasMaxLength(100)
+                .HasColumnName("Cabin_Name");
+            entity.Property(e => e.TowerKey).HasColumnName("Tower_Key");
 
-            entity.HasOne(d => d.Tower).WithMany(p => p.Cabins)
-                .HasForeignKey(d => d.TowerId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.TowerKeyNavigation).WithMany(p => p.Cabins)
+                .HasForeignKey(d => d.TowerKey)
                 .HasConstraintName("FK_Cabin_Tower");
         });
 
         modelBuilder.Entity<Cable>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cable__3214EC27D5089817");
+            entity.HasKey(e => e.CableKey).HasName("PK__Cable__5420959C23C4B9B7");
 
-            entity.ToTable("Cable", "sta");
+            entity.ToTable("Cable", "STA");
 
-            entity.HasIndex(e => e.CabinId, "IX_Cabin_ID");
+            entity.HasIndex(e => e.CabinKey, "idx_Cable_CabinKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CabinId).HasColumnName("Cabin_ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.CableKey).HasColumnName("Cable_Key");
+            entity.Property(e => e.CabinKey).HasColumnName("Cabin_Key");
+            entity.Property(e => e.CableName)
+                .HasMaxLength(100)
+                .HasColumnName("Cable_Name");
 
-            entity.HasOne(d => d.Cabin).WithMany(p => p.Cables)
-                .HasForeignKey(d => d.CabinId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.CabinKeyNavigation).WithMany(p => p.Cables)
+                .HasForeignKey(d => d.CabinKey)
                 .HasConstraintName("FK_Cable_Cabin");
         });
 
         modelBuilder.Entity<Channel>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__channel__3213E83F742E29AA");
+            entity.HasKey(e => e.ChannelKey).HasName("PK__Channel__011B50F442581D1D");
 
-            entity.ToTable("Channel", "fta");
+            entity.ToTable("Channel", "FTA");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.ChannelKey).HasColumnName("Channel_Key");
+            entity.Property(e => e.ChannelName)
+                .HasMaxLength(100)
+                .HasColumnName("Channel_Name");
         });
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__City__3214EC2785C9176D");
+            entity.HasKey(e => e.CityKey).HasName("PK__City__2D42E4414BC818AE");
 
-            entity.ToTable("City", "sta");
+            entity.ToTable("City", "STA");
 
-            entity.HasIndex(e => e.ZoneId, "IX_Zone_ID");
+            entity.HasIndex(e => e.ZoneKey, "idx_City_ZoneKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.ZoneId).HasColumnName("Zone_ID");
+            entity.Property(e => e.CityKey).HasColumnName("City_Key");
+            entity.Property(e => e.CityName)
+                .HasMaxLength(100)
+                .HasColumnName("City_Name");
+            entity.Property(e => e.ZoneKey).HasColumnName("Zone_Key");
 
-            entity.HasOne(d => d.Zone).WithMany(p => p.Cities)
-                .HasForeignKey(d => d.ZoneId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.ZoneKeyNavigation).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.ZoneKey)
                 .HasConstraintName("FK_City_Zone");
         });
 
         modelBuilder.Entity<CuttingDownA>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cutting___3214EC2711B78E30");
+            entity.HasKey(e => e.CuttingDownAIncidentId).HasName("PK__Cutting___DB73CADEA6AD29EA");
 
-            entity.ToTable("Cutting_Down_A", "sta");
+            entity.ToTable("Cutting_Down_A", "STA");
 
-            entity.HasIndex(e => e.ProblemTypeId, "IX_Problem_Type_ID");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CreateDate).HasColumnName("Create_Date");
-            entity.Property(e => e.CreatedUserName)
-                .HasMaxLength(100)
-                .HasColumnName("Created_User_Name");
+            entity.Property(e => e.CuttingDownAIncidentId).HasColumnName("Cutting_Down_A_Incident_ID");
             entity.Property(e => e.CuttingDownCabinName)
                 .HasMaxLength(100)
                 .HasColumnName("Cutting_Down_Cabin_Name");
-            entity.Property(e => e.EndDate).HasColumnName("End_Date");
-            entity.Property(e => e.IsActive).HasColumnName("Is_Active");
-            entity.Property(e => e.IsGlobal).HasColumnName("Is_Global");
-            entity.Property(e => e.IsPlanned).HasColumnName("Is_Planned");
-            entity.Property(e => e.PlannedEndDatetime)
-                .HasColumnType("datetime")
-                .HasColumnName("Planned_End_Datetime");
-            entity.Property(e => e.PlannedStartDatetime)
-                .HasColumnType("datetime")
-                .HasColumnName("Planned_Start_Datetime");
-            entity.Property(e => e.ProblemTypeId).HasColumnName("Problem_Type_ID");
-            entity.Property(e => e.UpdatedUserName)
-                .HasMaxLength(100)
-                .HasColumnName("Updated_User_Name");
+            entity.Property(e => e.PlannedEndDts)
+                .HasColumnName("PlannedEndDTS");
+            entity.Property(e => e.PlannedStartDts)
+                .HasColumnName("PlannedStartDTS");
+            entity.Property(e => e.ProblemTypeKey).HasColumnName("Problem_Type_Key");
 
-            entity.HasOne(d => d.StaProblemType).WithMany(p => p.CuttingDownAs)
-                .HasForeignKey(d => d.ProblemTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cutting_Down_A_Problem_Type");
+            entity.HasOne(d => d.ProblemTypeKeyNavigation).WithMany(p => p.CuttingDownAs)
+                .HasForeignKey(d => d.ProblemTypeKey)
+                .HasConstraintName("FK_CuttingDownA_ProblemType");
         });
 
         modelBuilder.Entity<CuttingDownB>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cutting___3214EC2783597760");
+            entity.HasKey(e => e.CuttingDownBIncidentId).HasName("PK__Cutting___C48B399FBEAC19D1");
 
-            entity.ToTable("Cutting_Down_B", "sta");
+            entity.ToTable("Cutting_Down_B", "STA");
 
-            entity.HasIndex(e => e.ProblemTypeId, "IX_Problem_Type_ID");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CreateDate).HasColumnName("Create_Date");
-            entity.Property(e => e.CreatedUserName)
-                .HasMaxLength(100)
-                .HasColumnName("Created_User_Name");
+            entity.Property(e => e.CuttingDownBIncidentId).HasColumnName("Cutting_Down_B_Incident_ID");
             entity.Property(e => e.CuttingDownCableName)
                 .HasMaxLength(100)
                 .HasColumnName("Cutting_Down_Cable_Name");
-            entity.Property(e => e.EndDate).HasColumnName("End_Date");
-            entity.Property(e => e.IsActive).HasColumnName("Is_Active");
-            entity.Property(e => e.IsGlobal).HasColumnName("Is_Global");
-            entity.Property(e => e.IsPlanned).HasColumnName("Is_Planned");
-            entity.Property(e => e.PlannedEndDatetime)
-                .HasColumnType("datetime")
-                .HasColumnName("Planned_End_Datetime");
-            entity.Property(e => e.PlannedStartDatetime)
-                .HasColumnType("datetime")
-                .HasColumnName("Planned_Start_Datetime");
-            entity.Property(e => e.ProblemTypeId).HasColumnName("Problem_Type_ID");
-            entity.Property(e => e.UpdatedUserName)
-                .HasMaxLength(100)
-                .HasColumnName("Updated_User_Name");
+            entity.Property(e => e.PlannedEndDts)
+                .HasColumnName("PlannedEndDTS");
+            entity.Property(e => e.PlannedStartDts)
+                .HasColumnName("PlannedStartDTS");
+            entity.Property(e => e.ProblemTypeKey).HasColumnName("Problem_Type_Key");
 
-            entity.HasOne(d => d.StaProblemType).WithMany(p => p.CuttingDownBs)
-                .HasForeignKey(d => d.ProblemTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cutting_Down_B_Problem_Type");
+            entity.HasOne(d => d.ProblemTypeKeyNavigation).WithMany(p => p.CuttingDownBs)
+                .HasForeignKey(d => d.ProblemTypeKey)
+                .HasConstraintName("FK_CuttingDownB_ProblemType");
         });
 
         modelBuilder.Entity<CuttingDownDetail>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cutting___3214EC27920A4AF8");
+            entity.HasKey(e => e.CuttingDownDetailKey).HasName("PK__Cutting___DB17612BA5A92787");
 
-            entity.ToTable("Cutting_Down_Detail", "fta");
+            entity.ToTable("Cutting_Down_Detail", "FTA");
 
-            entity.HasIndex(e => e.CuttingDownHeaderId, "IX_Cutting_Down_Header_ID");
+            entity.HasIndex(e => e.CuttingDownKey, "idx_Cutting_Down_Detail_HeaderKey");
 
-            entity.HasIndex(e => e.NetworkElementId, "IX_Network_Element_ID");
+            entity.HasIndex(e => e.NetworkElementKey, "idx_Cutting_Down_Detail_Network_ElementKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ActualCreateDate).HasColumnName("Actual_Create_Date");
-            entity.Property(e => e.ActualEndDate).HasColumnName("Actual_End_Date");
-            entity.Property(e => e.CuttingDownHeaderId).HasColumnName("Cutting_Down_Header_ID");
-            entity.Property(e => e.ImpactedCustomers).HasColumnName("Impacted_Customers");
-            entity.Property(e => e.NetworkElementId).HasColumnName("Network_Element_ID");
+            entity.Property(e => e.CuttingDownDetailKey).HasColumnName("Cutting_Down_Detail_Key");
+            entity.Property(e => e.CuttingDownKey).HasColumnName("Cutting_Down_Key");
+            entity.Property(e => e.NetworkElementKey).HasColumnName("Network_Element_Key");
 
-            entity.HasOne(d => d.CuttingDownHeader).WithMany(p => p.CuttingDownDetails)
-                .HasForeignKey(d => d.CuttingDownHeaderId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Cutting_Down_Detail_Cutting_Down_Header");
+            entity.HasOne(d => d.CuttingDownKeyNavigation).WithMany(p => p.CuttingDownDetails)
+                .HasForeignKey(d => d.CuttingDownKey)
+                .HasConstraintName("FK_Cutting_Down_Detail_Header");
 
-            entity.HasOne(d => d.NetworkElement).WithMany(p => p.CuttingDownDetails)
-                .HasForeignKey(d => d.NetworkElementId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.NetworkElementKeyNavigation).WithMany(p => p.CuttingDownDetails)
+                .HasForeignKey(d => d.NetworkElementKey)
                 .HasConstraintName("FK_Cutting_Down_Detail_Network_Element");
         });
 
         modelBuilder.Entity<CuttingDownHeader>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cutting___3214EC272ED484D6");
+            entity.HasKey(e => e.CuttingDownKey).HasName("PK__Cutting___5629E0B09DF13C0B");
 
-            entity.ToTable("Cutting_Down_Header", "fta");
+            entity.ToTable("Cutting_Down_Header", "FTA");
 
-            entity.HasIndex(e => e.ChannelId, "IX_Channel_ID");
+            entity.HasIndex(e => e.ChannelKey, "idx_Cutting_Down_Header_ChannelKey");
 
-            entity.HasIndex(e => e.CreatedSystemUserId, "IX_Created_System_User_ID");
+            entity.HasIndex(e => e.CuttingDownProblemTypeKey, "idx_Cutting_Down_Header_Problem_TypeKey");
 
-            entity.HasIndex(e => e.CuttingDownIncidentId, "IX_Cutting_Down_Incident_ID");
-
-            entity.HasIndex(e => e.CuttingDownProblemId, "IX_Cutting_Down_Problem_ID");
-
-            entity.HasIndex(e => e.UpdatedSystemUserId, "IX_Updated_System_User_ID");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ActualCreateDate).HasColumnName("Actual_Create_Date");
-            entity.Property(e => e.ActualEndDate).HasColumnName("Actual_End_Date");
-            entity.Property(e => e.ChannelId).HasColumnName("Channel_ID");
-            entity.Property(e => e.CreatedSystemUserId).HasColumnName("Created_System_User_ID");
+            entity.Property(e => e.CuttingDownKey).HasColumnName("Cutting_Down_Key");
+            entity.Property(e => e.ChannelKey).HasColumnName("Channel_Key");
+            entity.Property(e => e.CreateSystemUserId).HasColumnName("CreateSystemUserID");
             entity.Property(e => e.CuttingDownIncidentId).HasColumnName("Cutting_Down_Incident_ID");
-            entity.Property(e => e.CuttingDownProblemId).HasColumnName("Cutting_Down_Problem_ID");
-            entity.Property(e => e.IsActive).HasColumnName("Is_Active");
-            entity.Property(e => e.IsGlobal).HasColumnName("Is_Global");
-            entity.Property(e => e.IsPlanned).HasColumnName("Is_Planned");
-            entity.Property(e => e.PlannedEndDatetime)
-                .HasColumnType("datetime")
-                .HasColumnName("Planned_End_Datetime");
-            entity.Property(e => e.PlannedStartDateyime)
-                .HasColumnType("datetime")
-                .HasColumnName("Planned_Start_Dateyime");
-            entity.Property(e => e.SynchCreateDate).HasColumnName("Synch_Create_Date");
-            entity.Property(e => e.SynchUpdateDate).HasColumnName("Synch_Update_Date");
-            entity.Property(e => e.UpdatedSystemUserId).HasColumnName("Updated_System_User_ID");
+            entity.Property(e => e.CuttingDownProblemTypeKey).HasColumnName("Cutting_Down_Problem_Type_Key");
+            entity.Property(e => e.PlannedEndDts)
+                .HasColumnName("PlannedEndDTS");
+            entity.Property(e => e.PlannedStartDts)
+                .HasColumnName("PlannedStartDTS");
+            entity.Property(e => e.UpdateSystemUserId).HasColumnName("UpdateSystemUserID");
 
-            entity.HasOne(d => d.Channel).WithMany(p => p.CuttingDownHeaders)
-                .HasForeignKey(d => d.ChannelId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.ChannelKeyNavigation).WithMany(p => p.CuttingDownHeaders)
+                .HasForeignKey(d => d.ChannelKey)
                 .HasConstraintName("FK_Cutting_Down_Header_Channel");
 
-            entity.HasOne(d => d.CreatedSystemUser).WithMany(p => p.CuttingDownHeaderCreatedSystemUsers)
-                .HasForeignKey(d => d.CreatedSystemUserId)
-                .HasConstraintName("FK_Cutting_Down_Header_User3");
+            entity.HasOne(d => d.CreateSystemUser).WithMany(p => p.CuttingDownHeaderCreateSystemUsers)
+                .HasForeignKey(d => d.CreateSystemUserId)
+                .HasConstraintName("FK_Cutting_Down_Header_Users");
 
-            entity.HasOne(d => d.CuttingDownFtaProblem).WithMany(p => p.CuttingDownHeaders)
-                .HasForeignKey(d => d.CuttingDownProblemId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.CuttingDownProblemTypeKeyNavigation).WithMany(p => p.CuttingDownHeaders)
+                .HasForeignKey(d => d.CuttingDownProblemTypeKey)
                 .HasConstraintName("FK_Cutting_Down_Header_Problem_Type");
 
-            entity.HasOne(d => d.UpdatedSystemUser).WithMany(p => p.CuttingDownHeaderUpdatedSystemUsers)
-                .HasForeignKey(d => d.UpdatedSystemUserId)
-                .HasConstraintName("FK_Cutting_Down_Header_User2");
+            entity.HasOne(d => d.UpdateSystemUser).WithMany(p => p.CuttingDownHeaderUpdateSystemUsers)
+                .HasForeignKey(d => d.UpdateSystemUserId)
+                .HasConstraintName("FK_Cutting_Down_Header_Users1");
         });
 
         modelBuilder.Entity<CuttingDownIgnored>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Cutting___3214EC27853328E0");
+            entity
+                .HasNoKey()
+                .ToTable("Cutting_Down_Ignored", "FTA");
 
-            entity.ToTable("Cutting_Down_Ignored", "fta");
-
-            entity.HasIndex(e => e.CreatedUserId, "IX_Created_User_Id");
-
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.ActualCreateDate).HasColumnName("Actual_Create_Date");
             entity.Property(e => e.CabinName)
                 .HasMaxLength(100)
                 .HasColumnName("Cabin_Name");
             entity.Property(e => e.CableName)
                 .HasMaxLength(100)
                 .HasColumnName("Cable_Name");
-            entity.Property(e => e.CreatedUserId).HasColumnName("Created_User_Id");
-            entity.Property(e => e.SynchDate).HasColumnName("Synch_Date");
+            entity.Property(e => e.CuttingDownIncidentId).HasColumnName("Cutting_Down_Incident_ID");
 
-            entity.HasOne(d => d.CreatedUser).WithMany(p => p.CuttingDownIgnoreds)
-                .HasForeignKey(d => d.CreatedUserId)
-                .HasConstraintName("FK_Cutting_Down_Ignored_User");
+            entity.HasOne(d => d.CreatedUserNavigation).WithMany()
+                .HasForeignKey(d => d.CreatedUser)
+                .HasConstraintName("FK_Cutting_Down_Ignored_Users");
         });
 
         modelBuilder.Entity<Flat>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Flat__3214EC27705E4CC3");
+            entity.HasKey(e => e.FlatKey).HasName("PK__Flat__B7E8B7F70F3CA75F");
 
-            entity.ToTable("Flat", "sta");
+            entity.ToTable("Flat", "STA");
 
-            entity.HasIndex(e => e.BuildingId, "IX_Building_ID");
+            entity.HasIndex(e => e.BuildingKey, "idx_Flat_BuildingKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.BuildingId).HasColumnName("Building_ID");
+            entity.Property(e => e.FlatKey).HasColumnName("Flat_Key");
+            entity.Property(e => e.FlatName).HasColumnName("Flat_Name");
+            entity.Property(e => e.BuildingKey).HasColumnName("Building_Key");
 
-            entity.HasOne(d => d.Building).WithMany(p => p.Flats)
-                .HasForeignKey(d => d.BuildingId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.BuildingKeyNavigation).WithMany(p => p.Flats)
+                .HasForeignKey(d => d.BuildingKey)
                 .HasConstraintName("FK_Flat_Building");
         });
 
-        modelBuilder.Entity<Governrate>(entity =>
+        modelBuilder.Entity<Governorate>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Governra__3214EC27C7BF0174");
+            entity.HasKey(e => e.GovernrateKey).HasName("PK__Governor__7EE78ED56E13B025");
 
-            entity.ToTable("Governrate", "sta");
+            entity.ToTable("Governorate", "STA");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.GovernrateKey).HasColumnName("Governrate_Key");
+            entity.Property(e => e.GovernrateName)
+                .HasMaxLength(100)
+                .HasColumnName("Governrate_Name");
         });
 
         modelBuilder.Entity<NetworkElement>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Network___3214EC27114E61DB");
+            entity.HasKey(e => e.NetworkElementKey).HasName("PK__Network___C7B956967B8DBE63");
 
-            entity.ToTable("Network_Element", "fta");
+            entity.ToTable("Network_Element", "FTA");
 
-            entity.HasIndex(e => e.NetworkElementTypeId, "IX_Network_Element_Type_ID");
+            entity.HasIndex(e => e.ParentNetworkElementKey, "idx_Network_Element_ParentKey");
 
-            entity.HasIndex(e => e.ParentNetworkElementId, "IX_Parent_Network_Element_ID");
+            entity.HasIndex(e => e.NetworkElementTypeKey, "idx_Network_Element_TypeKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.NetworkElementTypeId).HasColumnName("Network_Element_Type_ID");
-            entity.Property(e => e.ParentNetworkElementId).HasColumnName("Parent_Network_Element_ID");
+            entity.Property(e => e.NetworkElementKey).HasColumnName("Network_Element_Key");
+            entity.Property(e => e.NetworkElementName)
+                .HasMaxLength(255)
+                .HasColumnName("Network_Element_Name");
+            entity.Property(e => e.NetworkElementTypeKey).HasColumnName("Network_Element_Type_Key");
+            entity.Property(e => e.ParentNetworkElementKey).HasColumnName("Parent_Network_Element_Key");
 
-            entity.HasOne(d => d.NetworkElementType).WithMany(p => p.NetworkElements)
-                .HasForeignKey(d => d.NetworkElementTypeId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Network_Element_Network_Element_Type");
+            entity.HasOne(d => d.NetworkElementTypeKeyNavigation).WithMany(p => p.NetworkElements)
+                .HasForeignKey(d => d.NetworkElementTypeKey)
+                .HasConstraintName("FK_Network_Element_Type");
 
-            entity.HasOne(d => d.ParentNetworkElement).WithMany(p => p.InverseParentNetworkElement)
-                .HasForeignKey(d => d.ParentNetworkElementId)
-                .HasConstraintName("FK_Network_Element_Network_Element");
+            entity.HasOne(d => d.ParentNetworkElementKeyNavigation).WithMany(p => p.InverseParentNetworkElementKeyNavigation)
+                .HasForeignKey(d => d.ParentNetworkElementKey)
+                .HasConstraintName("FK_Network_Element_Parent");
         });
 
         modelBuilder.Entity<NetworkElementHierarchyPath>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Network___3214EC279E35EDF0");
+            entity.HasKey(e => e.NetworkElementHierarchyPathKey).HasName("PK__Network___EC59B2AB292D5B9A");
 
-            entity.ToTable("Network_Element_Hierarchy_Path", "fta");
+            entity.ToTable("Network_Element_Hierarchy_Path", "FTA");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Abbreviation)
-                .IsRequired()
-                .HasMaxLength(200);
-            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.NetworkElementHierarchyPathKey).HasColumnName("Network_Element_Hierarchy_Path_Key");
+            entity.Property(e => e.Abbreviation).HasMaxLength(100);
+            entity.Property(e => e.NetwrokElementHierarchyPathName)
+                .HasMaxLength(255)
+                .HasColumnName("Netwrok_Element_Hierarchy_Path_Name");
         });
 
         modelBuilder.Entity<NetworkElementType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__network___3214EC2714360033");
+            entity.HasKey(e => e.NetworkElementTypeKey).HasName("PK__Network___DD02B8BB50F4F3DF");
 
-            entity.ToTable("Network_Element_Type", "fta");
+            entity.ToTable("Network_Element_Type", "FTA");
 
-            entity.HasIndex(e => e.NetworkElementHierarchyPathId, "IX_Network_Element_Hierarchy_Path_ID");
+            entity.HasIndex(e => e.ParentNetworkElementTypeKey, "idx_Network_Element_Type_ParentKey");
 
-            entity.HasIndex(e => e.ParentNetworkElementId, "IX_Parent_Network_Element_ID");
+            entity.Property(e => e.NetworkElementTypeKey).HasColumnName("Network_Element_Type_Key");
+            entity.Property(e => e.NetworkElementHierarchyPathKey).HasColumnName("Network_Element_Hierarchy_Path_Key");
+            entity.Property(e => e.NetworkElementTypeName)
+                .HasMaxLength(100)
+                .HasColumnName("Network_Element_Type_Name");
+            entity.Property(e => e.ParentNetworkElementTypeKey).HasColumnName("Parent_Network_Element_Type_Key");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.NetworkElementHierarchyPathId).HasColumnName("Network_Element_Hierarchy_Path_ID");
-            entity.Property(e => e.ParentNetworkElementId).HasColumnName("Parent_Network_Element_ID");
-
-            entity.HasOne(d => d.NetworkElementHierarchyPath).WithMany(p => p.NetworkElementTypes)
-                .HasForeignKey(d => d.NetworkElementHierarchyPathId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.NetworkElementHierarchyPathKeyNavigation).WithMany(p => p.NetworkElementTypes)
+                .HasForeignKey(d => d.NetworkElementHierarchyPathKey)
                 .HasConstraintName("FK_Network_Element_Type_Network_Element_Hierarchy_Path");
 
-            entity.HasOne(d => d.ParentNetworkElement).WithMany(p => p.InverseParentNetworkElement)
-                .HasForeignKey(d => d.ParentNetworkElementId)
-                .HasConstraintName("FK_Network_Element_Type_Network_Element_Type");
+            entity.HasOne(d => d.ParentNetworkElementTypeKeyNavigation).WithMany(p => p.InverseParentNetworkElementTypeKeyNavigation)
+                .HasForeignKey(d => d.ParentNetworkElementTypeKey)
+                .HasConstraintName("FK_Network_Element_Type_Parent");
         });
 
-        modelBuilder.Entity<FtaProblemType>(entity =>
+        modelBuilder.Entity<FTAProblemType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Problem___3214EC27FCB5161C");
+            entity.HasKey(e => e.ProblemTypeKey).HasName("PK__Problem___E6DB25E9E4566EA1");
 
-            entity.ToTable("Problem_Type", "fta");
+            entity.ToTable("Problem_Type", "FTA");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.ProblemTypeKey).HasColumnName("Problem_Type_Key");
+            entity.Property(e => e.ProblemTypeName)
+                .HasMaxLength(100)
+                .HasColumnName("Problem_Type_Name");
         });
 
-        modelBuilder.Entity<StaProblemType>(entity =>
+        modelBuilder.Entity<STAProblemType>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Problem___3214EC27437D720B");
+            entity.HasKey(e => e.ProblemTypeKey).HasName("PK__Problem___E6DB25E95ABD8009");
 
-            entity.ToTable("Problem_Type", "sta");
+            entity.ToTable("Problem_Type", "STA");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.ProblemTypeKey).HasColumnName("Problem_Type_Key");
+            entity.Property(e => e.ProblemTypeName)
+                .HasMaxLength(100)
+                .HasColumnName("Problem_Type_Name");
         });
 
         modelBuilder.Entity<Sector>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Sector__3214EC27BA3D05DC");
+            entity.HasKey(e => e.SectorKey).HasName("PK__Sector__4D01A17EE6436EBD");
 
-            entity.ToTable("Sector", "sta");
+            entity.ToTable("Sector", "STA");
 
-            entity.HasIndex(e => e.GovernrateId, "IX_Governrate_ID");
+            entity.HasIndex(e => e.GovernrateKey, "idx_Sector_GovernrateKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.GovernrateId).HasColumnName("Governrate_ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.SectorKey).HasColumnName("Sector_Key");
+            entity.Property(e => e.GovernrateKey).HasColumnName("Governrate_Key");
+            entity.Property(e => e.SectorName)
+                .HasMaxLength(100)
+                .HasColumnName("Sector_Name");
 
-            entity.HasOne(d => d.Governrate).WithMany(p => p.Sectors)
-                .HasForeignKey(d => d.GovernrateId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Sector_Governrate");
+            entity.HasOne(d => d.GovernrateKeyNavigation).WithMany(p => p.Sectors)
+                .HasForeignKey(d => d.GovernrateKey)
+                .HasConstraintName("FK_Sector_Governorate");
         });
 
         modelBuilder.Entity<Station>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Station__3214EC27374B3ED9");
+            entity.HasKey(e => e.StationKey).HasName("PK__Station__32A17CF0024F2ADA");
 
-            entity.ToTable("Station", "sta");
+            entity.ToTable("Station", "STA");
 
-            entity.HasIndex(e => e.CityId, "IX_City_ID");
+            entity.HasIndex(e => e.CityKey, "idx_Station_CityKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CityId).HasColumnName("City_ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.StationKey).HasColumnName("Station_Key");
+            entity.Property(e => e.CityKey).HasColumnName("City_Key");
+            entity.Property(e => e.StationName)
+                .HasMaxLength(100)
+                .HasColumnName("Station_Name");
 
-            entity.HasOne(d => d.City).WithMany(p => p.Stations)
-                .HasForeignKey(d => d.CityId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.CityKeyNavigation).WithMany(p => p.Stations)
+                .HasForeignKey(d => d.CityKey)
                 .HasConstraintName("FK_Station_City");
         });
 
-        modelBuilder.Entity<Subscribtion>(entity =>
+        modelBuilder.Entity<Subscription>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Subscrib__3214EC2786556170");
+            entity.HasKey(e => e.SubscriptionKey).HasName("PK__Subscrip__283EE706A4594C50");
 
-            entity.ToTable("Subscribtion", "sta");
+            entity.ToTable("Subscription", "STA");
 
-            entity.HasIndex(e => e.BuildingId, "IX_Building_ID");
+            entity.HasIndex(e => e.BuildingKey, "idx_Subscription_BuildingKey");
 
-            entity.HasIndex(e => e.FlatId, "IX_Flat_ID");
+            entity.HasIndex(e => e.FlatKey, "idx_Subscription_FlatKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.BuildingId).HasColumnName("Building_ID");
-            entity.Property(e => e.FlatId).HasColumnName("Flat_ID");
-            entity.Property(e => e.MeterId).HasColumnName("Meter_ID");
-            entity.Property(e => e.PaletId).HasColumnName("Palet_ID");
+            entity.Property(e => e.SubscriptionKey).HasColumnName("Subscription_Key");
+            entity.Property(e => e.BuildingKey).HasColumnName("Building_Key");
+            entity.Property(e => e.FlatKey).HasColumnName("Flat_Key");
+            entity.Property(e => e.MeterKey).HasColumnName("Meter_Key");
+            entity.Property(e => e.PaletKey).HasColumnName("Palet_Key");
 
-            entity.HasOne(d => d.Building).WithMany(p => p.Subscribtions)
-                .HasForeignKey(d => d.BuildingId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Subscribtion_Building");
+            entity.HasOne(d => d.BuildingKeyNavigation).WithMany(p => p.Subscriptions)
+                .HasForeignKey(d => d.BuildingKey)
+                .HasConstraintName("FK_Subscription_Building");
 
-            entity.HasOne(d => d.Flat).WithMany(p => p.Subscribtions)
-                .HasForeignKey(d => d.FlatId)
-                .HasConstraintName("FK_Subscribtion_Flat");
+            entity.HasOne(d => d.FlatKeyNavigation).WithMany(p => p.Subscriptions)
+                .HasForeignKey(d => d.FlatKey)
+                .HasConstraintName("FK_Subscription_Flat");
         });
 
         modelBuilder.Entity<Tower>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Tower__3214EC2733E8A859");
+            entity.HasKey(e => e.TowerKey).HasName("PK__Tower__6CF1B014B417D0C9");
 
-            entity.ToTable("Tower", "sta");
+            entity.ToTable("Tower", "STA");
 
-            entity.HasIndex(e => e.StationId, "IX_Station_ID");
+            entity.HasIndex(e => e.StationKey, "idx_Tower_StationKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.StationId).HasColumnName("Station_ID");
+            entity.Property(e => e.TowerKey).HasColumnName("Tower_Key");
+            entity.Property(e => e.StationKey).HasColumnName("Station_Key");
+            entity.Property(e => e.TowerName)
+                .HasMaxLength(100)
+                .HasColumnName("Tower_Name");
 
-            entity.HasOne(d => d.Station).WithMany(p => p.Towers)
-                .HasForeignKey(d => d.StationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.StationKeyNavigation).WithMany(p => p.Towers)
+                .HasForeignKey(d => d.StationKey)
                 .HasConstraintName("FK_Tower_Station");
         });
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__user__3213E83FC7BB03C9");
+            entity.HasKey(e => e.UserKey).HasName("PK__Users__A2B887F2CAA2D633");
 
-            entity.ToTable("User", "fta");
+            entity.ToTable("Users", "FTA");
 
-            entity.Property(e => e.UserId).HasColumnName("User_Key");
-            entity.Property(e => e.Password)
-                .IsRequired()
-                .HasColumnName("Password");
-            entity.Property(e => e.Username)
-                .IsRequired()
-                .HasMaxLength(100);
+            entity.Property(e => e.UserKey).HasColumnName("User_Key");
+            entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.Password).HasMaxLength(100);
         });
 
         modelBuilder.Entity<Zone>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Zone__3214EC272CCECF78");
+            entity.HasKey(e => e.ZoneKey).HasName("PK__Zone__702254989059BBDF");
 
-            entity.ToTable("Zone", "sta");
+            entity.ToTable("Zone", "STA");
 
-            entity.HasIndex(e => e.SectorId, "IX_Sector_ID");
+            entity.HasIndex(e => e.SectorKey, "idx_Zone_SectorKey");
 
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Name).HasMaxLength(100);
-            entity.Property(e => e.SectorId).HasColumnName("Sector_ID");
+            entity.Property(e => e.ZoneKey).HasColumnName("Zone_Key");
+            entity.Property(e => e.SectorKey).HasColumnName("Sector_Key");
+            entity.Property(e => e.ZoneName)
+                .HasMaxLength(100)
+                .HasColumnName("Zone_Name");
 
-            entity.HasOne(d => d.Sector).WithMany(p => p.Zones)
-                .HasForeignKey(d => d.SectorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+            entity.HasOne(d => d.SectorKeyNavigation).WithMany(p => p.Zones)
+                .HasForeignKey(d => d.SectorKey)
                 .HasConstraintName("FK_Zone_Sector");
         });
 

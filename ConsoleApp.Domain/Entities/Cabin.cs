@@ -1,16 +1,14 @@
-﻿
+﻿namespace ConsoleApp.Domain.Entities;
 
-namespace ConsoleApp.Domain.Entities;
-
-public class Cabin
+public partial class Cabin
 {
-    public int Id { get; set; }
+    public int CabinKey { get; set; }
 
-    public string Name { get; set; }
+    public int? TowerKey { get; set; }
 
-    public int TowerId { get; set; }
+    public string? CabinName { get; set; }
 
     public virtual ICollection<Cable> Cables { get; set; } = new List<Cable>();
 
-    public virtual Tower Tower { get; set; }
+    public virtual Tower? TowerKeyNavigation { get; set; }
 }

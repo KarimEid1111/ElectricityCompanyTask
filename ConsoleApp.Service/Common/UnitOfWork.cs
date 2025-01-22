@@ -18,10 +18,10 @@ namespace ConsoleApp.Service.Common
         Lazy<INetworkElementHierarchyPathRepository> networkElementHierarchyRepository,
         Lazy<INetworkElementRepository> networkElementRepository,
         Lazy<INetworkElementTypeRepository> networkElementTypeRepository,
-        Lazy<IFtaProblemTypeRepository> ftaProblemTypeRepository,
-        Lazy<IStaProblemTypeRepository> staProblemTypeRepository,
+        Lazy<IFTAProblemTypeRepository> ftaProblemTypeRepository,
+        Lazy<ISTAProblemTypeRepository> staProblemTypeRepository,
         Lazy<ISectorRepository> sectorRepository,
-        Lazy<IStationRepository> stationRepository,
+        Lazy<ISTAtionRepository> stationRepository,
         Lazy<ISubscribtionRepository> subscriptionRepository,
         Lazy<ITowerRepository> towerRepository,
         Lazy<IUserRepository> userRepository,
@@ -41,10 +41,10 @@ namespace ConsoleApp.Service.Common
         public INetworkElementHierarchyPathRepository NetworkElementHierarchyRepository => networkElementHierarchyRepository.Value;
         public INetworkElementRepository NetworkElementRepository => networkElementRepository.Value;
         public INetworkElementTypeRepository NetworkElementTypeRepository => networkElementTypeRepository.Value;
-        public IFtaProblemTypeRepository FtaProblemTypeRepository => ftaProblemTypeRepository.Value;
-        public IStaProblemTypeRepository StaProblemTypeRepository => staProblemTypeRepository.Value;
+        public IFTAProblemTypeRepository IftaProblemTypeRepository => ftaProblemTypeRepository.Value;
+        public ISTAProblemTypeRepository IstaProblemTypeRepository => staProblemTypeRepository.Value;
         public ISectorRepository SectorRepository => sectorRepository.Value;
-        public IStationRepository StationRepository => stationRepository.Value;
+        public ISTAtionRepository IstAtionRepository => stationRepository.Value;
         public ISubscribtionRepository SubscriptionRepository => subscriptionRepository.Value;
         public ITowerRepository TowerRepository => towerRepository.Value;
         public IUserRepository UserRepository => userRepository.Value;

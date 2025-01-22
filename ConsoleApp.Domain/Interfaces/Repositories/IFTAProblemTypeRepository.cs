@@ -3,7 +3,7 @@ using ConsoleApp.Domain.Interfaces.Common;
 
 namespace ConsoleApp.Domain.Interfaces.Repositories;
 
-public interface IFtaProblemTypeRepository : IGenericRepository<FtaProblemType>
+public interface IFTAProblemTypeRepository : IGenericRepository<FTAProblemType>
 {
     
 }

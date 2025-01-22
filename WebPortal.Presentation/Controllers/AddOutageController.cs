@@ -1,42 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebPortal.Models;
-using WebPortalDomain.Entities;
 using WebPortalDomain.Interfaces.Common;
+using WebPortalDomain.Dtos;
+using WebPortalDomain.Entities;
 
 namespace WebPortal.Controllers;
 
-public class AddOutageController : Controller
+public class AddOutageController(IUnitOfWork unitOfWork) : Controller
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    public AddOutageController(IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
-    }
-
     [HttpGet]
     public async Task<IActionResult> AddOutage()
     {
         ViewData["ShowCuttingPortalNav"] = true;
         ViewData["ActivePage"] = "AddOutage";
+
         // Fetch dropdown data using Unit of Work repositories
-        var problemTypes = await _unitOfWork.FtaProblemTypeRepository.GetAllAsync();
-        var networkHierarchies = await _unitOfWork.NetworkElementHierarchyRepository.GetAllAsync();
-        var searchCriteria = await _unitOfWork.NetworkElementTypeRepository.GetAllAsync();
+        var problemTypes = await unitOfWork.FtaProblemTypeRepository.GetAllAsync();
+        var networkHierarchies = await unitOfWork.NetworkElementHierarchyRepository.GetAllAsync();
+        var searchCriteria = await unitOfWork.NetworkElementTypeRepository.GetAllAsync();
 
         // Map data to view model
         var model = new AddOutageViewModel
         {
+            
             ProblemTypes = problemTypes.Select(pt => new SelectListItem
             {
+                
                 Value = pt.ProblemTypeKey.ToString(),
                 Text = pt.ProblemTypeName
             }).ToList(),
 
             NetworkHierarchies = networkHierarchies.Select(nh => new SelectListItem
             {
-                Value = nh.NetworkElementHierarchyPathKey.ToString(), // Assuming Abbreviation maps to this key
+                Value = nh.NetworkElementHierarchyPathKey.ToString(),
                 Text = nh.Abbreviation
             }).ToList(),
 
@@ -47,8 +44,22 @@ public class AddOutageController : Controller
             }).ToList()
         };
 
-        ViewData["ActivePage"] = "AddOutage"; // Highlight the current tab in the navigation
         return View(model);
+    }
+
+    [HttpGet("api/AddOutage/GetChildren/{parentId}")]
+    public async Task<IActionResult> GetChildren(int parentId)
+    {
+        // Call repository method to fetch child elements
+        var childElements = await unitOfWork.NetworkElementRepository.GetFirstLevelChildElementsAsync(parentId);
+
+        // Ensure the result contains data
+        if (childElements == null || !childElements.Any())
+        {
+            return NotFound("No child elements found.");
+        }
+
+        return Ok(childElements);
     }
 
     [HttpPost]
@@ -56,16 +67,16 @@ public class AddOutageController : Controller
     {
         if (!ModelState.IsValid)
         {
-            // If the model is invalid, reload dropdown data for rendering
-            model.ProblemTypes = (await _unitOfWork.FtaProblemTypeRepository.GetAllAsync())
+            // Reload dropdown data for rendering in case of validation errors
+            model.ProblemTypes = (await unitOfWork.FtaProblemTypeRepository.GetAllAsync())
                 .Select(pt => new SelectListItem { Value = pt.ProblemTypeKey.ToString(), Text = pt.ProblemTypeName })
                 .ToList();
 
-            model.NetworkHierarchies = (await _unitOfWork.NetworkElementHierarchyRepository.GetAllAsync())
+            model.NetworkHierarchies = (await unitOfWork.NetworkElementHierarchyRepository.GetAllAsync())
                 .Select(nh => new SelectListItem { Value = nh.NetworkElementHierarchyPathKey.ToString(), Text = nh.Abbreviation })
                 .ToList();
 
-            model.SearchCriteria = (await _unitOfWork.NetworkElementTypeRepository.GetAllAsync())
+            model.SearchCriteria = (await unitOfWork.NetworkElementTypeRepository.GetAllAsync())
                 .Select(sc => new SelectListItem { Value = sc.NetworkElementTypeKey.ToString(), Text = sc.NetworkElementTypeName })
                 .ToList();
 
@@ -84,8 +95,8 @@ public class AddOutageController : Controller
         };
 
         // Add outage through Unit of Work
-        await _unitOfWork.CuttingDownHeaderRepository.AddAsync(newOutage);
-        await _unitOfWork.SaveChangesAsync();
+        await unitOfWork.CuttingDownHeaderRepository.AddAsync(newOutage);
+        await unitOfWork.SaveChangesAsync();
 
         return RedirectToAction("AddOutage");
     }

@@ -19,13 +19,13 @@ namespace ConsoleApp.Domain.Interfaces.Common
         INetworkElementHierarchyPathRepository NetworkElementHierarchyRepository { get; }
         INetworkElementRepository NetworkElementRepository { get; }
         INetworkElementTypeRepository NetworkElementTypeRepository { get; }
-        IFtaProblemTypeRepository FtaProblemTypeRepository { get; }
+        IFTAProblemTypeRepository IftaProblemTypeRepository { get; }
         ISectorRepository SectorRepository { get; }
-        IStationRepository StationRepository { get; }
+        ISTAtionRepository IstAtionRepository { get; }
         ISubscribtionRepository SubscriptionRepository { get; }
         ITowerRepository TowerRepository { get; }
         IUserRepository UserRepository { get; }
         IZoneRepository ZoneRepository { get; }
-        IStaProblemTypeRepository StaProblemTypeRepository { get; }
+        ISTAProblemTypeRepository IstaProblemTypeRepository { get; }
     }
 }

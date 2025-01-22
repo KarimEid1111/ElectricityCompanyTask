@@ -6,6 +6,6 @@ using ConsoleApp.Service.Common;
 namespace ConsoleApp.Service.Repositories;
 
 public class SubscribtionRepository(MyDbContext context)
-    : GenericRepository<Subscribtion>(context), ISubscribtionRepository
+    : GenericRepository<Subscription>(context), ISubscribtionRepository
 {
 }

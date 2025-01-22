@@ -3,7 +3,7 @@ using ConsoleApp.Domain.Interfaces.Common;
 
 namespace ConsoleApp.Domain.Interfaces.Repositories;
 
-public interface IGovernrateRepository : IGenericRepository<Governrate>
+public interface IGovernrateRepository : IGenericRepository<Governorate>
 {
     
 }

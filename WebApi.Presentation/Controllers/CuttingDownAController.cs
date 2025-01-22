@@ -19,7 +19,7 @@ public class CuttingDownController(ICuttingDownAService cuttingDownAService, ICu
         {
             var result = await cuttingDownAService.GenerateCabinCuttingsAsync();
             if (!result)
-                return BadRequest("Data already exists in CuttingDownA table.");
+                return Ok("Data already exists in CuttingDownA table.");
             
             return Ok("Cabin cuttings test data generated successfully.");
         }
@@ -40,7 +40,7 @@ public class CuttingDownController(ICuttingDownAService cuttingDownAService, ICu
         {
             var result = await cuttingDownBService.GenerateCableCuttingsAsync();
             if (!result)
-                return BadRequest("Data already exists in CuttingDownB table.");
+                return Ok("Data already exists in CuttingDownB table.");
             
             return Ok("Cable cuttings test data generated successfully.");
         }

@@ -1,12 +1,10 @@
-﻿
+﻿namespace ConsoleApp.Domain.Entities;
 
-namespace ConsoleApp.Domain.Entities;
-
-public class Channel
+public partial class Channel
 {
-    public int Id { get; set; }
+    public int ChannelKey { get; set; }
 
-    public string Name { get; set; }
+    public string? ChannelName { get; set; }
 
     public virtual ICollection<CuttingDownHeader> CuttingDownHeaders { get; set; } = new List<CuttingDownHeader>();
 }

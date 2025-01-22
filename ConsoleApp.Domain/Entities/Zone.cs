@@ -1,14 +1,14 @@
 ﻿namespace ConsoleApp.Domain.Entities;
 
-public class Zone
+public partial class Zone
 {
-    public int Id { get; set; }
+    public int ZoneKey { get; set; }
 
-    public string Name { get; set; }
+    public int? SectorKey { get; set; }
 
-    public int SectorId { get; set; }
+    public string? ZoneName { get; set; }
 
     public virtual ICollection<City> Cities { get; set; } = new List<City>();
 
-    public virtual Sector Sector { get; set; }
+    public virtual Sector? SectorKeyNavigation { get; set; }
 }

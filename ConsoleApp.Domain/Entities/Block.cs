@@ -1,15 +1,14 @@
-﻿
-namespace ConsoleApp.Domain.Entities;
+﻿namespace ConsoleApp.Domain.Entities;
 
-public class Block
+public partial class Block
 {
-    public int Id { get; set; }
+    public int BlockKey { get; set; }
 
-    public string Name { get; set; }
+    public int? CableKey { get; set; }
 
-    public int CableId { get; set; }
+    public string? BlockName { get; set; }
 
     public virtual ICollection<Building> Buildings { get; set; } = new List<Building>();
 
-    public virtual Cable Cable { get; set; }
+    public virtual Cable? CableKeyNavigation { get; set; }
 }

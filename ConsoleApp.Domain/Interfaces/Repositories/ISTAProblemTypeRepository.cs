@@ -3,7 +3,7 @@ using ConsoleApp.Domain.Interfaces.Common;
 
 namespace ConsoleApp.Domain.Interfaces.Repositories;
 
-public interface IStationRepository : IGenericRepository<Station>
+public interface ISTAProblemTypeRepository : IGenericRepository<STAProblemType>
 {
     
 }

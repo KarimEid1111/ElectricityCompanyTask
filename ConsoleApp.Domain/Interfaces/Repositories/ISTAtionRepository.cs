@@ -1,9 +1,10 @@
 ﻿using ConsoleApp.Domain.Entities;
 using ConsoleApp.Domain.Interfaces.Common;
 
+
 namespace ConsoleApp.Domain.Interfaces.Repositories;
 
-public interface IStaProblemTypeRepository : IGenericRepository<StaProblemType>
+public interface ISTAtionRepository : IGenericRepository<Station>
 {
     
 }

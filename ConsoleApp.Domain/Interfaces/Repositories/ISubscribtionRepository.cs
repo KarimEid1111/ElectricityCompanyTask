@@ -3,7 +3,7 @@ using ConsoleApp.Domain.Interfaces.Common;
 
 namespace ConsoleApp.Domain.Interfaces.Repositories;
 
-public interface ISubscribtionRepository : IGenericRepository<Subscribtion>
+public interface ISubscribtionRepository : IGenericRepository<Subscription>
 {
     
 }

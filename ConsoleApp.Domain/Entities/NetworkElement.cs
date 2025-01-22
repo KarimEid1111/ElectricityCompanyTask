@@ -1,20 +1,20 @@
 ﻿namespace ConsoleApp.Domain.Entities;
 
-public class NetworkElement
+public partial class NetworkElement
 {
-    public int Id { get; set; }
+    public int NetworkElementKey { get; set; }
 
-    public string Name { get; set; }
+    public string? NetworkElementName { get; set; }
 
-    public int? ParentNetworkElementId { get; set; }
+    public int? NetworkElementTypeKey { get; set; }
 
-    public int NetworkElementTypeId { get; set; }
+    public int? ParentNetworkElementKey { get; set; }
 
     public virtual ICollection<CuttingDownDetail> CuttingDownDetails { get; set; } = new List<CuttingDownDetail>();
 
-    public virtual ICollection<NetworkElement> InverseParentNetworkElement { get; set; } = new List<NetworkElement>();
+    public virtual ICollection<NetworkElement> InverseParentNetworkElementKeyNavigation { get; set; } = new List<NetworkElement>();
 
-    public virtual NetworkElementType NetworkElementType { get; set; }
+    public virtual NetworkElementType? NetworkElementTypeKeyNavigation { get; set; }
 
-    public virtual NetworkElement ParentNetworkElement { get; set; }
+    public virtual NetworkElement? ParentNetworkElementKeyNavigation { get; set; }
 }

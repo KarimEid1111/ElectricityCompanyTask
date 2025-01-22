@@ -1,10 +1,10 @@
 ﻿namespace ConsoleApp.Domain.Entities;
 
-public class StaProblemType
+public partial class STAProblemType
 {
-    public int Id { get; set; }
+    public int ProblemTypeKey { get; set; }
 
-    public string Name { get; set; }
+    public string? ProblemTypeName { get; set; }
 
     public virtual ICollection<CuttingDownA> CuttingDownAs { get; set; } = new List<CuttingDownA>();
 

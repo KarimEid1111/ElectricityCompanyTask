@@ -1,35 +1,90 @@
 ﻿@model WebPortal.Models.AddOutageViewModel
 
 <div class="container mt-5">
-    <h2>Add Outage</h2>
+    <h2 class="table-title">Add Outage</h2>
 
-    <form asp-action="Add" method="post">
-        <div class="form-group">
-            <label for="NetworkHierarchy">Network Hierarchy</label>
-            <select asp-for="ChannelKey" class="form-control" asp-items="Model.NetworkHierarchies">
+    <!-- Add Outage Form -->
+    <form asp-action="Add" method="post" class="custom-search-form">
+        <div class="form-group mb-3">
+            <label for="NetworkHierarchy" class="form-label">Network Hierarchy</label>
+            <select asp-for="ChannelKey" class="form-select" asp-items="Model.NetworkHierarchies">
                 <option value="">Please select</option>
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="ProblemTypeKey">Problem Type</label>
-            <select asp-for="ProblemTypeKey" class="form-control" asp-items="Model.ProblemTypes">
+        <div class="form-group mb-3">
+            <label for="ProblemTypeKey" class="form-label">Problem Type</label>
+            <select asp-for="ProblemTypeKey" class="form-select" asp-items="Model.ProblemTypes">
                 <option value="">Please select</option>
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="StartDate">Start Date</label>
+        <div class="form-group mb-3">
+            <label for="StartDate" class="form-label">Start Date</label>
             <input asp-for="IsPlanned" type="date" class="form-control" />
         </div>
 
-        <div class="form-group">
-            <label for="SearchCriteria">Search Criteria</label>
-            <select asp-for="IncidentId" class="form-control" asp-items="Model.SearchCriteria">
-                <option value="">Please select</option>
-            </select>
+        <!-- Row for Search Criteria and Search Value with Button -->
+        <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="SearchCriteria" class="form-label">Search Criteria</label>
+                    <select asp-for="IncidentId" class="form-select" asp-items="Model.SearchCriteria">
+                        <option value="">Please select</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="form-group">
+                    <label for="SearchValue" class="form-label">Search Value</label>
+                    <div class="input-group">
+                        <input type="text" id="SearchValue" name="SearchValue" class="form-control" placeholder="Enter search value" />
+                        <button type="button" id="searchNetwork" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        <!-- Dynamic Network Selection Panel -->
+        <div id="network-selection-container" class="mt-4">
+            @await Html.PartialAsync("_NetworkSelectionPanel", Model.NetworkSelection)
+        </div>
+
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Trigger search button click event
+            $('#searchNetwork').on('click', function () {
+                const searchValue = $('#SearchValue').val();
+                const searchCriteria = $('#SearchCriteria').val();
+
+                if (!searchValue || !searchCriteria) {
+                    alert('Please select a search criteria and enter a search value.');
+                    return;
+                }
+
+                // Fetch the filtered network data dynamically via AJAX
+                $.ajax({
+                    url: `/api/AddOutage/SearchNetwork`,
+                    type: 'GET',
+                    data: {
+                        criteria: searchCriteria,
+                        value: searchValue
+                    },
+                    success: function (data) {
+                        // Render the network selection dynamically
+                        $('#network-selection-container').html(data);
+                    },
+                    error: function () {
+                        alert('Failed to load network selection. Please try again.');
+                    }
+                });
+            });
+        });
+    </script>
+}

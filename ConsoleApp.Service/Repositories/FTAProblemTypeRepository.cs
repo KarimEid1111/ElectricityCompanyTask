@@ -5,7 +5,7 @@ using ConsoleApp.Service.Common;
 
 namespace ConsoleApp.Service.Repositories;
 
-public class FtaProblemTypeRepository(MyDbContext context) : GenericRepository<FtaProblemType>(context), IFtaProblemTypeRepository
+public class FTAProblemTypeRepository(MyDbContext context) : GenericRepository<FTAProblemType>(context), IFTAProblemTypeRepository
 {
     
 }

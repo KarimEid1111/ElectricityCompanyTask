@@ -2,7 +2,7 @@
 
 namespace WebPortal.Models;
 
-public class AddOutageViewModel
+public class NetworkSelectionViewModel
 {
     public int? IncidentId { get; set; }
     public int? ChannelKey { get; set; }
@@ -12,6 +12,7 @@ public class AddOutageViewModel
     public List<SelectListItem> ProblemTypes { get; set; } = new();
     public List<SelectListItem> NetworkHierarchies { get; set; } = new();
     public List<SelectListItem> SearchCriteria { get; set; } = new();
-    
+
+    // Add the Network Selection ViewModel
     public NetworkSelectionViewModel NetworkSelection { get; set; } = new();
 }

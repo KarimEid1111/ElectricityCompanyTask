@@ -1,14 +1,14 @@
 ﻿namespace ConsoleApp.Domain.Entities;
 
-public class Tower
+public partial class Tower
 {
-    public int Id { get; set; }
+    public int TowerKey { get; set; }
 
-    public string Name { get; set; }
+    public int? StationKey { get; set; }
 
-    public int StationId { get; set; }
+    public string? TowerName { get; set; }
 
     public virtual ICollection<Cabin> Cabins { get; set; } = new List<Cabin>();
 
-    public virtual Station Station { get; set; }
+    public virtual Station? StationKeyNavigation { get; set; }
 }

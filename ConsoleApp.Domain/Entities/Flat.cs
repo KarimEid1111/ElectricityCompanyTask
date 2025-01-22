@@ -1,14 +1,14 @@
-﻿
+﻿namespace ConsoleApp.Domain.Entities;
 
-namespace ConsoleApp.Domain.Entities;
-
-public class Flat
+public partial class Flat
 {
-    public int Id { get; set; }
+    public int FlatKey { get; set; }
 
-    public int BuildingId { get; set; }
+    public int? BuildingKey { get; set; }
+    
+    public string? FlatName { get; set; }
 
-    public virtual Building Building { get; set; }
+    public virtual Building? BuildingKeyNavigation { get; set; }
 
-    public virtual ICollection<Subscribtion> Subscribtions { get; set; } = new List<Subscribtion>();
+    public virtual ICollection<Subscription> Subscriptions { get; set; } = new List<Subscription>();
 }

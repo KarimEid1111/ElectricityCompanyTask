@@ -5,7 +5,7 @@ using ConsoleApp.Service.Common;
 
 namespace ConsoleApp.Service.Repositories;
 
-public class GovernrateRepository(MyDbContext context) : GenericRepository<Governrate>(context), IGovernrateRepository
+public class GovernrateRepository(MyDbContext context) : GenericRepository<Governorate>(context), IGovernrateRepository
 {
     
 }

@@ -1,16 +1,14 @@
-﻿
+﻿namespace ConsoleApp.Domain.Entities;
 
-namespace ConsoleApp.Domain.Entities;
-
-public class City
+public partial class City
 {
-    public int Id { get; set; }
+    public int CityKey { get; set; }
 
-    public string Name { get; set; }
+    public int? ZoneKey { get; set; }
 
-    public int ZoneId { get; set; }
+    public string? CityName { get; set; }
 
     public virtual ICollection<Station> Stations { get; set; } = new List<Station>();
 
-    public virtual Zone Zone { get; set; }
+    public virtual Zone? ZoneKeyNavigation { get; set; }
 }
