@@ -23,10 +23,8 @@ public class AddOutageController(IUnitOfWork unitOfWork) : Controller
         // Map data to view model
         var model = new AddOutageViewModel
         {
-            
             ProblemTypes = problemTypes.Select(pt => new SelectListItem
             {
-                
                 Value = pt.ProblemTypeKey.ToString(),
                 Text = pt.ProblemTypeName
             }).ToList(),
@@ -41,7 +39,8 @@ public class AddOutageController(IUnitOfWork unitOfWork) : Controller
             {
                 Value = sc.NetworkElementTypeKey.ToString(),
                 Text = sc.NetworkElementTypeName
-            }).ToList()
+            }).ToList(),
+            NetworkElements = await unitOfWork.CuttingDownHeaderRepository.GetNetworkElementsAsync(null)
         };
 
         return View(model);
@@ -65,37 +64,31 @@ public class AddOutageController(IUnitOfWork unitOfWork) : Controller
     [HttpPost]
     public async Task<IActionResult> Add(AddOutageViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            // Reload dropdown data for rendering in case of validation errors
-            model.ProblemTypes = (await unitOfWork.FtaProblemTypeRepository.GetAllAsync())
-                .Select(pt => new SelectListItem { Value = pt.ProblemTypeKey.ToString(), Text = pt.ProblemTypeName })
-                .ToList();
 
-            model.NetworkHierarchies = (await unitOfWork.NetworkElementHierarchyRepository.GetAllAsync())
-                .Select(nh => new SelectListItem { Value = nh.NetworkElementHierarchyPathKey.ToString(), Text = nh.Abbreviation })
-                .ToList();
-
-            model.SearchCriteria = (await unitOfWork.NetworkElementTypeRepository.GetAllAsync())
-                .Select(sc => new SelectListItem { Value = sc.NetworkElementTypeKey.ToString(), Text = sc.NetworkElementTypeName })
-                .ToList();
-
-            return View("AddOutage", model);
-        }
-
-        // Map ViewModel to Entity
-        var newOutage = new CuttingDownHeader
-        {
-            CuttingDownIncidentId = model.IncidentId,
-            ChannelKey = model.ChannelKey,
-            CuttingDownProblemTypeKey = model.ProblemTypeKey,
-            ActualCreateDate = DateOnly.FromDateTime(DateTime.Now),
-            IsActive = true,
-            IsPlanned = model.IsPlanned
-        };
-
-        // Add outage through Unit of Work
-        await unitOfWork.CuttingDownHeaderRepository.AddAsync(newOutage);
+        var cuttingDetail = new CuttingDownDetail();
+        var cuttingHeader = new CuttingDownHeader();
+        var channels = await unitOfWork.ChannelRepository.GetAllAsync();
+        cuttingHeader.ChannelKey = model.HierarchyAbbreviation == "Governrate -> Individual Subscription"
+            ? channels.Where(x => x.ChannelName == "Source A")
+                .Select(x => x.ChannelKey)
+                .FirstOrDefault()
+            : channels.Where(x => x.ChannelName == "Source B")
+                .Select(x => x.ChannelKey)
+                .FirstOrDefault();
+        cuttingHeader.IsActive = true;
+        cuttingHeader.IsGlobal = false;
+        cuttingHeader.IsPlanned = false;
+        cuttingHeader.ActualCreateDate = model.StartDate;
+        var user = await unitOfWork.UserRepository.GetSingleAsync(i => i.Name == "admin");
+        cuttingHeader.CreateSystemUserId = user?.UserKey;
+        cuttingHeader.CuttingDownProblemTypeKey = model.ProblemTypeKey;
+        cuttingHeader.SynchCreateDate = DateOnly.FromDateTime(DateTime.Now);
+        cuttingDetail.ActualCreateDate = model.StartDate;
+        cuttingDetail.ImpactedCustomers =
+            await unitOfWork.NetworkElementRepository.GetAffectedCustomersAsync(model.NetworkElementId);
+        cuttingDetail.NetworkElementKey = model.NetworkElementId;
+        cuttingDetail.CuttingDownKeyNavigation = cuttingHeader;
+        await unitOfWork.CuttingDetailRepository.AddAsync(cuttingDetail);
         await unitOfWork.SaveChangesAsync();
 
         return RedirectToAction("AddOutage");

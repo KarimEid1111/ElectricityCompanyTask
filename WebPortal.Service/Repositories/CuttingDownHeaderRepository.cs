@@ -91,4 +91,25 @@ public class CuttingDownHeaderRepository(MyDbContext context)
             })
             .ToListAsync();
     }
+
+    public async Task<List<CuttingsForAddDto>> GetCuttingsByNetworkElementId(int elementId)
+    {
+        return await context.GetCuttingsForAdd
+            .FromSqlRaw($"fta.SP_Get_Cutting_Incidents_For_Element {elementId}")
+            .ToListAsync();
+    }
+    public async Task<List<NetworkElementDto>> GetNetworkElementsAsync(int? parentId)
+    {
+        return await context.NetworkElements
+            .Where(x => x.ParentNetworkElementKey == parentId)
+            .Select(x => new NetworkElementDto
+            {
+                Id = x.NetworkElementKey,
+                NetworkElementTypeId = x.NetworkElementTypeKey ?? 0,
+                NetworkElementName = x.NetworkElementName,
+                ParentElementId = x.ParentNetworkElementKey,
+                Children = new List<NetworkElementDto>()
+            })
+            .ToListAsync();
+    }
 }

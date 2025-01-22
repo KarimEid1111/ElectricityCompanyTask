@@ -20,17 +20,22 @@ namespace WebPortal.Service.Common
             return context.Set<T>().AsQueryable();
         }
 
-        public void DeleteAsync(T entity)
+        public void Delete(T entity)
 
         {
             context.Set<T>().Remove(entity);
+        }
+
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await context.Set<T>().Where(predicate).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await context.Set<T>().ToListAsync();
         }
-        public async Task<T> GetByIdAsync(int? id)
+        public virtual async Task<T> GetByIdAsync(int? id)
         {
             return await context.Set<T>().FindAsync(id);
         }

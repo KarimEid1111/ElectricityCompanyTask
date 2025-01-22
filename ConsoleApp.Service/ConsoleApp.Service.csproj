@@ -14,4 +14,13 @@
       <ProjectReference Include="..\ConsoleApp.Domain\ConsoleApp.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Services\DatabaseInitializer.cs" />
+      <Compile Remove="Repositories\StationRepository.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Bogus" Version="35.6.1" />
+    </ItemGroup>
+
 </Project>

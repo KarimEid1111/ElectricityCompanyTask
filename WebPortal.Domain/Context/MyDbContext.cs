@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WebPortalDomain.Dtos;
 using WebPortalDomain.Entities;
 
 namespace WebPortalDomain.Context;
@@ -61,7 +62,9 @@ public partial class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Zone> Zones { get; set; }
-
+    public virtual DbSet<NumberOfAffectedCustomersDto> NumberOfAffectedCustomers { get; set; }
+    public virtual DbSet<CuttingsForAddDto> GetCuttingsForAdd { get; set; }
+    public virtual DbSet<GetHierarchyPathDto> GetNetworkHierarchyPath { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer(
@@ -527,7 +530,11 @@ public partial class MyDbContext : Microsoft.EntityFrameworkCore.DbContext
                 .HasForeignKey(d => d.SectorKey)
                 .HasConstraintName("FK_Zone_Sector");
         });
-
+        
+        modelBuilder.Entity<NumberOfAffectedCustomersDto>().HasNoKey();
+        modelBuilder.Entity<CuttingsForAddDto>().HasNoKey();
+        modelBuilder.Entity<GetHierarchyPathDto>().HasNoKey();
+        
         OnModelCreatingPartial(modelBuilder);
     }
 

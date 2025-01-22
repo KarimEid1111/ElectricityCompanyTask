@@ -30,6 +30,7 @@ namespace WebPortalDomain.Interfaces.Common
         IStaProblemTypeRepository StaProblemTypeRepository { get; }
         ICuttingDownHeaderRepository CuttingDownHeaderRepository { get; }
         ICuttingDownIgnoredRepository CuttingDownIgnoredRepository { get;}
+        ICuttingDetailRepository CuttingDetailRepository { get;}
     }
     
 }

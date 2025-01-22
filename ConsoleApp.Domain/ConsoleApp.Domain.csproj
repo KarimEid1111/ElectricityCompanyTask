@@ -23,4 +23,8 @@
       <Folder Include="Interfaces\Services\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Interfaces\Services\IDatabaseInitializer.cs" />
+    </ItemGroup>
+
 </Project>

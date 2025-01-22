@@ -1,90 +1,118 @@
 ﻿@model WebPortal.Models.AddOutageViewModel
 
-<div class="container mt-5">
-    <h2 class="table-title">Add Outage</h2>
+<div class="container my-5">
+    <h2 class="text-primary fw-bold mb-4">Add Outage</h2>
 
     <!-- Add Outage Form -->
-    <form asp-action="Add" method="post" class="custom-search-form">
-        <div class="form-group mb-3">
-            <label for="NetworkHierarchy" class="form-label">Network Hierarchy</label>
-            <select asp-for="ChannelKey" class="form-select" asp-items="Model.NetworkHierarchies">
-                <option value="">Please select</option>
-            </select>
+    <form asp-action="Add" asp-controller="AddOutage" method="post" class="border p-4 rounded bg-light">
+        <input type="hidden" id="NetworkElementId1" name="NetworkElementId" value="" />
+
+        <div class="row g-3">
+            <!-- Network Hierarchy -->
+            <div class="col-md-6">
+                <label for="HierarchyAbbreviation" class="form-label">Network Hierarchy</label>
+                <select asp-for="HierarchyAbbreviation" id="HierarchyAbbreviation" class="form-select">
+                    <option value="">Please select</option>
+                    @foreach (var item in Model.NetworkHierarchies)
+                    {
+                        <option value="@item.Text">@item.Text</option>
+                    }
+                </select>
+            </div>
+
+            <!-- Problem Type -->
+            <div class="col-md-6">
+                <label for="ProblemTypeKey" class="form-label">Problem Type</label>
+                <select asp-for="ProblemTypeKey" id="ProblemTypeKey" class="form-select">
+                    <option value="">Please select</option>
+                    @foreach (var type in Model.ProblemTypes)
+                    {
+                        <option value="@type.Value">@type.Text</option>
+                    }
+                </select>
+            </div>
         </div>
 
-        <div class="form-group mb-3">
-            <label for="ProblemTypeKey" class="form-label">Problem Type</label>
-            <select asp-for="ProblemTypeKey" class="form-select" asp-items="Model.ProblemTypes">
-                <option value="">Please select</option>
-            </select>
+        <div class="row g-3 mt-3">
+            <!-- Start Date -->
+            <div class="col-md-6">
+                <label for="StartDate" class="form-label">Start Date</label>
+                <input asp-for="StartDate" id="StartDate" type="date" class="form-control">
+            </div>
+
+            <!-- Search Criteria -->
+            <div class="col-md-6">
+                <label for="IncidentId" class="form-label">Search Criteria</label>
+                <select asp-for="IncidentId" id="IncidentId" class="form-select">
+                    <option value="">Please select</option>
+                    @foreach (var criteria in Model.SearchCriteria)
+                    {
+                        <option value="@criteria.Value">@criteria.Text</option>
+                    }
+                </select>
+                <input type="text" placeholder="Search Value" class="form-control mt-2" />
+            </div>
         </div>
 
-        <div class="form-group mb-3">
-            <label for="StartDate" class="form-label">Start Date</label>
-            <input asp-for="IsPlanned" type="date" class="form-control" />
+        <div class="row mt-4">
+            <!-- Buttons -->
+            <div class="col-md-6 text-center text-md-start">
+                <button type="button" id="searchNetwork" class="btn btn-outline-primary w-100">
+                    Search
+                </button>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <button type="submit" id="addCuttingButton" class="btn btn-primary w-100">
+                    Add Outage
+                </button>
+            </div>
         </div>
 
-        <!-- Row for Search Criteria and Search Value with Button -->
-        <div class="row">
+        <div class="row mt-5">
+            <!-- Hierarchy Section -->
             <div class="col-md-5">
-                <div class="form-group">
-                    <label for="SearchCriteria" class="form-label">Search Criteria</label>
-                    <select asp-for="IncidentId" class="form-select" asp-items="Model.SearchCriteria">
-                        <option value="">Please select</option>
-                    </select>
+                <div id="hierarchy-container" class="border rounded bg-white p-3 shadow-sm">
+                    <h5 class="text-secondary fw-bold">Network Hierarchy</h5>
+                    <ul class="list-group">
+                        @foreach (var element in Model.NetworkElements)
+                        {
+                            @await Html.PartialAsync("_HierarchyElement", element)
+                        }
+                    </ul>
                 </div>
             </div>
-            <div class="col-md-7">
-                <div class="form-group">
-                    <label for="SearchValue" class="form-label">Search Value</label>
-                    <div class="input-group">
-                        <input type="text" id="SearchValue" name="SearchValue" class="form-control" placeholder="Enter search value" />
-                        <button type="button" id="searchNetwork" class="btn btn-primary">
-                            <i class="bi bi-search"></i> Search
-                        </button>
-                    </div>
+
+            <!-- Arrow Button -->
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+                <button type="button" id="arrowButton" class="btn btn-outline-secondary">
+                    &raquo;&raquo;
+                </button>
+            </div>
+
+            <!-- Table Section -->
+            <div class="col-md-5">
+                <div class="border rounded bg-white p-3 shadow-sm">
+                    <h5 class="text-secondary fw-bold">Details</h5>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Network Element</th>
+                            <th>Number of Impacted Customers</th>
+                            <th>Cutting Incident ID</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- Data will be dynamically loaded -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
-        <!-- Dynamic Network Selection Panel -->
-        <div id="network-selection-container" class="mt-4">
-            @await Html.PartialAsync("_NetworkSelectionPanel", Model.NetworkSelection)
-        </div>
-
     </form>
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            // Trigger search button click event
-            $('#searchNetwork').on('click', function () {
-                const searchValue = $('#SearchValue').val();
-                const searchCriteria = $('#SearchCriteria').val();
-
-                if (!searchValue || !searchCriteria) {
-                    alert('Please select a search criteria and enter a search value.');
-                    return;
-                }
-
-                // Fetch the filtered network data dynamically via AJAX
-                $.ajax({
-                    url: `/api/AddOutage/SearchNetwork`,
-                    type: 'GET',
-                    data: {
-                        criteria: searchCriteria,
-                        value: searchValue
-                    },
-                    success: function (data) {
-                        // Render the network selection dynamically
-                        $('#network-selection-container').html(data);
-                    },
-                    error: function () {
-                        alert('Failed to load network selection. Please try again.');
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="/js/add-cutting-page-script.js" defer></script>
+    <script src="/js/hierarchy-expansion.js" defer></script>
 }

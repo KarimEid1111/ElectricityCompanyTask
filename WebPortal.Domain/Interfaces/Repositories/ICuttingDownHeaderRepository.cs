@@ -8,4 +8,7 @@ public interface ICuttingDownHeaderRepository : IGenericRepository<CuttingDownHe
 {
     Task<List<CuttingDownResultDto>> SearchCuttingDownIncidents(string sourceOfCuttingDown, string problemTypeKey,
         string isClosed, string searchCriteria, string searchValue);
+
+    Task<List<CuttingsForAddDto>> GetCuttingsByNetworkElementId(int elementId);
+    Task<List<NetworkElementDto>> GetNetworkElementsAsync(int? parentId);
 }

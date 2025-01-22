@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using WebPortalDomain.Context;
-using WebPortalDomain.Dtos;
 using WebPortal.Models;
-using WebPortalDomain.Entities;
 using WebPortalDomain.Interfaces.Common;
+using WebPortalDomain.Payloads;
 
 namespace WebPortal.Controllers
 {
@@ -99,7 +97,8 @@ namespace WebPortal.Controllers
                 });
             }
 
-            var result = await unitOfWork.CuttingDownHeaderRepository.SearchCuttingDownIncidents(filters.SourceOfCuttingDown,
+            var result = await unitOfWork.CuttingDownHeaderRepository.SearchCuttingDownIncidents(
+                filters.SourceOfCuttingDown,
                 filters.ProblemTypeKey, filters.IsClosed, filters.SearchCriteria, filters.SearchValue);
 
             // Populate Channels dropdown
@@ -229,36 +228,69 @@ namespace WebPortal.Controllers
             return View("AddOutage");
         }
 
-        // POST: Add a new outage
-        // [HttpPost]
-        // public async Task<IActionResult> AddOutage(AddOutageViewModel model)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return View("AddOutage", model); // Return the form with validation errors
-        //     }
-        //
-        //     var newOutage = new CuttingDownHeader
-        //     {
-        //         CuttingDownIncidentId = model.IncidentId,
-        //         ChannelKey = model.ChannelKey,
-        //         CuttingDownProblemTypeKey = model.ProblemTypeKey,
-        //         ActualCreateDate = DateOnly.FromDateTime(DateTime.Now),
-        //         IsActive = true,
-        //         IsPlanned = model.IsPlanned
-        //     };
-        //
-        //     _unitOfWork.CuttingDownHeaders.Add(newOutage);
-        //     await _unitOfWork.SaveChangesAsync();
-        //
-        //     return RedirectToAction("Search");
-        // }
-
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Login");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCuttingsById(int elementId)
+        {
+            var cuttings = await unitOfWork.CuttingDownHeaderRepository.GetCuttingsByNetworkElementId(elementId);
+            return Json(cuttings);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCutting(int id)
+        {
+            var cuttingDetail = await unitOfWork.CuttingDetailRepository.GetByIdAsync(id);
+            var cuttingDetailHeader =
+                await unitOfWork.CuttingDownHeaderRepository.GetByIdAsync(cuttingDetail.CuttingDownKeyNavigation!
+                    .CuttingDownKey);
+            unitOfWork.CuttingDetailRepository.Delete(cuttingDetail);
+            unitOfWork.CuttingDownHeaderRepository.Delete(cuttingDetailHeader);
+            await unitOfWork.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> CloseCutting(int id)
+        {
+            var manualUserId = await unitOfWork.CuttingDetailRepository.CloseCuttingAsync(id);
+
+            return Json(new
+            {
+                updatedSystemUserId = manualUserId,
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseAllCuttings([FromBody] CloseAllCuttingsPayload request)
+        {
+            var manualUserId = await unitOfWork.CuttingDetailRepository.CloseAllCuttingsAsync(request);
+
+            return Json(new
+            {
+                updatedSystemUserId = manualUserId,
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChildren(int parentId)
+        {
+            var children = await unitOfWork.CuttingDownHeaderRepository.GetNetworkElementsAsync(parentId);
+
+            return Json(children);
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetHierarchyPath(string searchValue)
+        {
+            var parent = await unitOfWork.NetworkElementRepository.GetHierarchyPath(searchValue);
+
+            return Json(parent);
         }
     }
 }

@@ -39,7 +39,7 @@
             {
                 <tr>
                     <td>
-                        @if (row.IsActive == true && row.ActualEndDate == null)
+                        @if (row.ActualEndDate == null)
                         {
                             <!-- Close Form -->
                             <form asp-action="CloseCase" asp-controller="CuttingDownSearch" method="post" style="display:inline;">

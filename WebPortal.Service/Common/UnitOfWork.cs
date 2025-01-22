@@ -29,6 +29,7 @@ namespace WebPortal.Service.Common
         IUserRepository userRepository,
         ICuttingDownHeaderRepository cuttingDownHeaderRepository,
         ICuttingDownIgnoredRepository cuttingDownIgnoredRepository,
+        ICuttingDetailRepository cuttingDownDetailRepository,
         IZoneRepository zoneRepository) : IUnitOfWork
     {
         private IDbContextTransaction _currentTransaction;
@@ -54,6 +55,7 @@ namespace WebPortal.Service.Common
         public IZoneRepository ZoneRepository => zoneRepository;
         public ICuttingDownHeaderRepository CuttingDownHeaderRepository => cuttingDownHeaderRepository;
         public ICuttingDownIgnoredRepository CuttingDownIgnoredRepository => cuttingDownIgnoredRepository;
+        public ICuttingDetailRepository CuttingDetailRepository => cuttingDownDetailRepository;
 
         // Save changes to the database
         public async Task<int> SaveChangesAsync()

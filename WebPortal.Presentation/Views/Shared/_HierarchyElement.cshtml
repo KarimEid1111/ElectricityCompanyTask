@@ -1,0 +1,12 @@
+@model WebPortalDomain.Dtos.NetworkElementDto
+
+<li>
+    <div class="flex items-center space-x-2">
+        <input type="checkbox" class="form-checkbox" id="box-@Model.Id" value="@Model.NetworkElementTypeId" name="selectedElements">
+        <button type="button" class="flex items-center space-x-2 toggle-button" data-id="@Model.Id">
+            <span class="arrow">&rarr;</span>
+            <span>@Model.NetworkElementName</span>
+        </button>
+    </div>
+    <ul class="pl-6 space-y-2 toggle-content hidden" id="children-@Model.Id"></ul>
+</li>

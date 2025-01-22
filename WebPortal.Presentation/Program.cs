@@ -35,6 +35,9 @@ builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
 builder.Services.AddScoped<ICuttingDownHeaderRepository, CuttingDownHeaderRepository>();
 builder.Services.AddScoped<IChannelRepository, ChannelRepository>();
 builder.Services.AddScoped<ICuttingDownIgnoredRepository, CuttingDownIgnoredRepository>();
+builder.Services.AddScoped<ICuttingDetailRepository, CuttingDetailRepository>();
+
+
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

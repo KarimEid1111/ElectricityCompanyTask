@@ -12,7 +12,4 @@ public class NetworkSelectionViewModel
     public List<SelectListItem> ProblemTypes { get; set; } = new();
     public List<SelectListItem> NetworkHierarchies { get; set; } = new();
     public List<SelectListItem> SearchCriteria { get; set; } = new();
-
-    // Add the Network Selection ViewModel
-    public NetworkSelectionViewModel NetworkSelection { get; set; } = new();
 }

@@ -40,7 +40,7 @@ public class IgnoredOutagesController(IUnitOfWork unitOfWork) : Controller
         if (record != null)
         {
             // Delete the record
-            unitOfWork.CuttingDownIgnoredRepository.DeleteAsync(record);
+            unitOfWork.CuttingDownIgnoredRepository.Delete(record);
             await unitOfWork.SaveChangesAsync();
         }
 
